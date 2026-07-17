@@ -2,92 +2,251 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Góc Đầu Tư Tri Thức - Thư Quán Cao Cấp</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Góc Đầu Tư Tri Thức - Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* [Giữ nguyên CSS của bạn tại đây để đảm bảo giao diện không đổi] */
-        :root { --bg-co-phong: #faf6f0; --green-bamboo: #3b5a4a; --red-clay: #a63f3a; --gold-accent: #c49a6c; }
-        body { background-color: #0b0908; display: flex; justify-content: center; }
-        .phone-container { width: 100%; max-width: 430px; background-color: var(--bg-co-phong); min-height: 100vh; overflow-y: auto; }
-        /* Thêm CSS cho các phần tử UI của bạn */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        
+        /* Hiệu ứng load khung xương */
+        .skeleton {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Hiệu ứng nổi bật cho Voucher */
+        .pulse-shadow { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); animation: pulse-red 2s infinite; }
+        @keyframes pulse-red {
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            50% { transform: scale(1); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        /* Glassmorphism nhẹ cho thẻ sách */
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body>
-    <div class="phone-container" id="main-phone-container">
-        <!-- Nội dung UI của bạn -->
-    </div>
+<body class="bg-stone-100 text-stone-800 pb-24">
+
+    <main class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative overflow-hidden">
+        
+        <!-- Header Banner & Avatar -->
+        <div class="h-40 bg-gradient-to-br from-stone-800 via-stone-900 to-black relative">
+            <!-- Họa tiết nền -->
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+            
+            <!-- Avatar -->
+            <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                <div class="w-24 h-24 bg-white rounded-full p-1 shadow-xl relative">
+                    <div class="w-full h-full bg-gradient-to-tr from-stone-700 to-stone-900 rounded-full flex items-center justify-center border-2 border-white overflow-hidden">
+                        <span class="font-black text-white text-xl tracking-wider">AION</span>
+                    </div>
+                    <!-- Tích xanh -->
+                    <div class="absolute bottom-1 right-1 bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                        <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-16 px-5 pb-6 text-center text-stone-900">
+            <h1 class="font-black text-2xl tracking-tight">Góc Đầu Tư Tri Thức</h1>
+            <p class="text-sm text-stone-500 mt-1 font-medium">Nâng cấp tư duy - Thay đổi cuộc đời</p>
+        </div>
+
+        <div class="px-4 space-y-4 mb-8">
+            <!-- Nút Voucher Độc Quyền -->
+            <a href="https://s.shopee.vn/4qE5VeAeaT" target="_blank" class="block w-full bg-gradient-to-r from-red-600 to-orange-500 text-white py-4 rounded-2xl font-black text-center pulse-shadow transition-transform hover:scale-[1.02]">
+                <i class="fa-solid fa-gift mr-2"></i> LẤY VOUCHER SHOPEE ĐỘC QUYỀN
+            </a>
+            
+            <!-- Nút Mạng Xã Hội -->
+            <div class="grid grid-cols-2 gap-3">
+                <a href="https://www.facebook.com/profile.php?id=61591746310277" target="_blank" class="flex items-center justify-center gap-2 bg-[#1877F2]/10 text-[#1877F2] py-3 rounded-xl font-bold text-sm border border-[#1877F2]/20 hover:bg-[#1877F2]/20 transition">
+                    <i class="fa-brands fa-facebook text-lg"></i> Facebook
+                </a>
+                <a href="https://www.tiktok.com/@gocdaututrithuc?_r=1&_t=ZS-984xB3SLtsi" target="_blank" class="flex items-center justify-center gap-2 bg-black/5 text-black py-3 rounded-xl font-bold text-sm border border-black/10 hover:bg-black/10 transition">
+                    <i class="fa-brands fa-tiktok text-lg"></i> TikTok
+                </a>
+            </div>
+        </div>
+
+        <!-- Bộ lọc danh mục -->
+        <div class="px-4 mb-4 sticky top-0 bg-white/90 backdrop-blur-md py-3 z-10 border-b border-stone-100">
+            <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1" id="filter-container">
+                <button onclick="filterBooks('all')" class="filter-btn active whitespace-nowrap px-5 py-2 bg-stone-900 text-white rounded-full text-xs font-bold transition shadow-md">Tất cả</button>
+                <button onclick="filterBooks('nang-cap')" class="filter-btn whitespace-nowrap px-5 py-2 bg-stone-100 text-stone-600 rounded-full text-xs font-bold transition hover:bg-stone-200">Nâng cấp tư duy</button>
+            </div>
+        </div>
+
+        <!-- Danh sách Sách -->
+        <div class="px-4 pb-10 space-y-4" id="book-container">
+            <!-- Skeleton Loading (Hiển thị khi đang tải) -->
+            <div class="border border-stone-100 rounded-2xl p-4 flex gap-4">
+                <div class="w-24 h-36 rounded-lg skeleton shrink-0"></div>
+                <div class="flex-1 space-y-3 py-1">
+                    <div class="h-4 bg-stone-200 rounded skeleton w-3/4"></div>
+                    <div class="h-3 bg-stone-200 rounded skeleton w-full"></div>
+                    <div class="h-3 bg-stone-200 rounded skeleton w-5/6"></div>
+                    <div class="h-8 bg-stone-200 rounded skeleton w-full mt-4"></div>
+                </div>
+            </div>
+            <div class="border border-stone-100 rounded-2xl p-4 flex gap-4">
+                <div class="w-24 h-36 rounded-lg skeleton shrink-0"></div>
+                <div class="flex-1 space-y-3 py-1">
+                    <div class="h-4 bg-stone-200 rounded skeleton w-2/3"></div>
+                    <div class="h-3 bg-stone-200 rounded skeleton w-full"></div>
+                    <div class="h-8 bg-stone-200 rounded skeleton w-full mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // 1. CẤU HÌNH DỊCH VỤ
-        const CONFIG = {
-            SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRSDNjSvjxfstsjznBpzU-Z0xkbQICuaDCYWgIAS1qKD7C7uVQAJaRrJTKcpyoDwreQgp_ffx-ogvc/pub?gid=0&single=true&output=csv",
-            MAIL_APP_URL: "https://script.google.com/macros/s/AKfycbx2SDBaU9CPkiL9d-2n-AuYAmY9pvWHPYvUBpuzKbjd5g1lwhtKpix8FaZN6bUHbqhYvg/exec",
-            FIREBASE: {
-                // Điền config Firebase của bạn nếu muốn dùng
-            }
-        };
+        const API_URL = "https://script.google.com/macros/s/AKfycby4E7C65cA_Yrl-hD7gVN_R9HChiEDggOmmphv7yHvYvOuM4CntcZlUam7UTAmHKQkt/exec";
+        let allBooks = [];
 
-        // 2. KHỞI TẠO FIREBASE
-        if (CONFIG.FIREBASE.apiKey) {
-            firebase.initializeApp(CONFIG.FIREBASE);
+        // Hàm hỗ trợ lấy dữ liệu linh hoạt (chống lỗi tên cột)
+        function getVal(item, keys) {
+            for (let key of keys) {
+                if (item[key] !== undefined && item[key] !== "") return item[key];
+            }
+            return null;
         }
 
-        // 3. LOGIC GỬI TÂM THƯ (Google Sheets)
-        async function handleMailSubmit(event) {
-            event.preventDefault();
-            const text = document.getElementById('mailbox-text').value;
-            const mood = activeMailboxMoodText || "🌸 An Yên";
-
+        async function initApp() {
             try {
-                await fetch(CONFIG.MAIL_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mood: mood, text: text })
-                });
-                alert("Thư đã được gửi vào hòm thư!");
-                document.getElementById('mailbox-text').value = '';
-            } catch (e) {
-                alert("Lỗi gửi thư, vui lòng thử lại!");
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                
+                // Lọc bỏ các hàng trống
+                allBooks = data.filter(b => getVal(b, ['title', 'ten', 'Tên Sách']));
+                renderBooks(allBooks);
+                extractCategories(allBooks);
+            } catch(e) {
+                console.error("Lỗi tải API:", e);
+                document.getElementById('book-container').innerHTML = `
+                    <div class="text-center p-6 bg-red-50 text-red-600 rounded-2xl border border-red-100">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
+                        <p class="font-bold text-sm">Không thể kết nối đến máy chủ Google Sheets.</p>
+                        <p class="text-xs mt-1">Vui lòng thử tải lại trang hoặc kiểm tra kết nối mạng.</p>
+                    </div>`;
             }
         }
 
-        // 4. LOGIC THỐNG KÊ (Firebase)
-        function recordAffClick(bookId, bookTitle) {
-            if (firebase.apps.length > 0) {
-                const db = firebase.database();
-                db.ref('stats/clicks/' + bookId).transaction((curr) => (curr || 0) + 1);
+        function renderBooks(books) {
+            const container = document.getElementById('book-container');
+            if (books.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-stone-400 text-sm font-medium">Không tìm thấy sách nào.</div>`;
+                return;
             }
-            // Logic mở link sau khi đã gửi request thống kê
-            console.log("Recorded click for:", bookTitle);
+
+            container.innerHTML = books.map(b => {
+                // 1. Lấy và chuẩn hóa dữ liệu
+                const title = getVal(b, ['title', 'ten', 'Tên Sách']);
+                const imgSrc = getVal(b, ['image', 'images', 'img', 'anh', 'Anh', 'urlAnh']);
+                const quote = getVal(b, ['quote', 'camxuc']);
+                const reviewText = getVal(b, ['reviewText', 'Mô tả']);
+                const badge = getVal(b, ['badge']);
+                const readTime = getVal(b, ['readTime']);
+                
+                // 2. Logic Nút bấm (CTA)
+                const shopeeLink = getVal(b, ['shopeeLink', 'link', 'Link Mua']);
+                const tiktokLink = getVal(b, ['tiktokLink']);
+                
+                let ctaButtons = '';
+                if (shopeeLink) {
+                    ctaButtons += `<a href="${shopeeLink}" target="_blank" class="flex-1 bg-[#EE4D2D] text-white py-2.5 rounded-lg text-center font-bold text-[11px] shadow-sm hover:bg-[#d74226] transition flex items-center justify-center gap-1"><i class="fa-solid fa-cart-shopping"></i> SHOPEE</a>`;
+                }
+                if (tiktokLink) {
+                    ctaButtons += `<a href="${tiktokLink}" target="_blank" class="flex-1 bg-black text-white py-2.5 rounded-lg text-center font-bold text-[11px] shadow-sm hover:bg-stone-800 transition flex items-center justify-center gap-1"><i class="fa-brands fa-tiktok"></i> TIKTOK</a>`;
+                }
+                if(!shopeeLink && !tiktokLink) {
+                    ctaButtons = `<button disabled class="w-full bg-stone-200 text-stone-500 py-2.5 rounded-lg text-center font-bold text-[11px] cursor-not-allowed">HẾT HÀNG</button>`;
+                }
+
+                // 3. Render HTML cho từng thẻ
+                return `
+                <div class="glass-card border border-stone-200 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition duration-300 relative group flex flex-col">
+                    
+                    <div class="flex gap-4 mb-3">
+                        <!-- Cột Ảnh -->
+                        <div class="relative shrink-0">
+                            <img src="${imgSrc}" onerror="this.src='https://placehold.co/200x300/e7e5e4/a8a29e?text=No+Image'" class="w-24 h-32 object-cover rounded-xl shadow-sm border border-stone-100">
+                            ${badge ? `<div class="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-[9px] font-black px-2 py-1 rounded-full shadow-md z-10 border border-white whitespace-nowrap">${badge}</div>` : ''}
+                        </div>
+                        
+                        <!-- Cột Thông tin -->
+                        <div class="flex-1 flex flex-col">
+                            <h3 class="font-black text-sm text-stone-900 leading-snug line-clamp-2 mb-1">${title}</h3>
+                            
+                            ${quote ? `<p class="text-[11px] text-stone-600 font-medium italic border-l-2 border-stone-300 pl-2 line-clamp-2 my-1">"${quote}"</p>` : ''}
+                            
+                            ${readTime ? `<div class="mt-auto flex items-center gap-1 text-[10px] text-stone-500 font-semibold bg-stone-100 w-fit px-2 py-1 rounded-md"><i class="fa-regular fa-clock"></i> ${readTime}</div>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Phần Review (Nếu có) -->
+                    ${reviewText ? `
+                    <div class="bg-stone-50 rounded-xl p-3 mb-3 border border-stone-100">
+                        <p class="text-[11px] text-stone-700 leading-relaxed"><span class="font-bold text-stone-900 mr-1">📝 Review:</span>${reviewText}</p>
+                    </div>` : ''}
+
+                    <!-- Phần Nút Bấm CTA (Quan trọng nhất) -->
+                    <div class="flex gap-2 mt-auto">
+                        ${ctaButtons}
+                    </div>
+                </div>
+                `;
+            }).join('');
         }
 
-        // 5. CÁC HÀM KHÁC
-        function selectMailboxMood(id, text) {
-            activeMailboxMoodId = id;
-            activeMailboxMoodText = text;
-            document.querySelectorAll('.btn-mood-stamp').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`mood-s-${id}`).classList.add('active');
+        function extractCategories(books) {
+            const container = document.getElementById('filter-container');
+            const cats = new Set();
+            books.forEach(b => {
+                const cat = getVal(b, ['category', 'danhmuc']);
+                if (cat) cats.add(cat);
+            });
+
+            // Khởi tạo lại nút "Tất cả"
+            let html = `<button onclick="filterBooks('all')" class="filter-btn active whitespace-nowrap px-5 py-2 bg-stone-900 text-white rounded-full text-xs font-bold transition shadow-md">Tất cả</button>`;
+            
+            // Thêm các danh mục lấy từ API
+            cats.forEach(cat => {
+                html += `<button onclick="filterBooks('${cat}')" class="filter-btn whitespace-nowrap px-5 py-2 bg-stone-100 text-stone-600 rounded-full text-xs font-bold transition hover:bg-stone-200">${cat}</button>`;
+            });
+            
+            container.innerHTML = html;
         }
 
-        // Khởi chạy
-        window.onload = () => {
-            // Logic load data từ CONFIG.SHEET_URL
-        };
+        window.filterBooks = function(cat) {
+            // Cập nhật UI nút bấm
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => {
+                btn.className = "filter-btn whitespace-nowrap px-5 py-2 bg-stone-100 text-stone-600 rounded-full text-xs font-bold transition hover:bg-stone-200";
+            });
+            event.currentTarget.className = "filter-btn active whitespace-nowrap px-5 py-2 bg-stone-900 text-white rounded-full text-xs font-bold transition shadow-md";
+
+            // Lọc dữ liệu
+            if (cat === 'all') {
+                renderBooks(allBooks);
+            } else {
+                const filtered = allBooks.filter(b => getVal(b, ['category', 'danhmuc']) === cat);
+                renderBooks(filtered);
+            }
+        }
+
+        // Bắt đầu ứng dụng
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
-```
-
-### Tại sao đây là bản kế hoạch hoàn hảo?
-1. **Tính modular:** Các phần logic (Firebase, Mail, UI) được tách biệt rõ ràng. Bạn có thể xóa Firebase nếu không muốn dùng mà không làm hỏng trang web.
-2. **Khả năng mở rộng:** Nếu bạn muốn đổi sang bất kỳ database nào khác trong tương lai, bạn chỉ cần sửa hàm `recordAffClick`.
-3. **Tính ổn định:** Code sử dụng `try/catch` để đảm bảo trang web không bị "chết" khi mạng chập chờn.
-
-**Bạn chỉ cần lưu file này lại, thay đổi các thông số URL của bạn vào phần `CONFIG` ở đầu file là xong.** Bạn có muốn tôi tích hợp thêm tính năng **Tự động gửi thông báo về Email mỗi khi có thư mới** ngay trong file Apps Script không?
