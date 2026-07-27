@@ -1,0 +1,28 @@
+name: Cap nhat Data moi 1 gio
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: 
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+
+    steps:
+      - name: Buoc 1 - Keo code ve
+        uses: actions/checkout@v3
+
+      - name: Buoc 2 - Tai du lieu tu Google Sheets
+        run: |
+          curl -L "https://script.google.com/macros/s/AKfycbxvzsAGLW1uRAJTQPlLHmkBcI0wlnSAlqxaCl77LLL_3Cf_gdOzaZCFb8NGjIRBlLlA/exec" -o data.json
+
+      - name: Buoc 3 - Luu file va day len web
+        run: |
+          git config --global user.name 'GitHub Action Bot'
+          git config --global user.email 'action@github.com'
+          git add data.json
+          git commit -m "Auto-update data.json" || exit 0
+          git push
