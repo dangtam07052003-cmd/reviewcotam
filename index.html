@@ -44,36 +44,8 @@
 <body class="text-gray-800 antialiased min-h-screen flex justify-center selection:bg-brand-primary selection:text-white" oncontextmenu="return false;">
 
     <script>
-        // ================================================================
-        // 🔴🔴 MÃ ĐỊNH DANH KOC (QUAN TRỌNG NHẤT) 🔴🔴
-        // - Để trống "" => Web sẽ biến thành Trang Đăng Ký cho Khách.
-        // - Điền mã (VD: "VIP-AION-001") => Web biến thành Bio Link của KOC.
-        const _k = "VIP-AION-001"; 
-        // ================================================================
-
-        const _formLink = "https://forms.gle/B1c5N6tXyrbNMwJG9"; 
-        const _zaloLink = "https://zalo.me/0888024295"; 
-
-        // API MASTER & LINK TỔNG DỰ PHÒNG CỦA BẠN (Đã chuẩn 100%)
-        const _mb = "https://script.google.com/macros/s/AKfycbyREAIihN5DmNCzl4PV7dCItL3W8kZHkzeIit7GzeiOBMHgIMtoLi4foA3tJctyFy9s/exec";
-        const _fb = "https://shopee.vn/m/ma-giam-gia"; 
-        
-        let _dict = {};       
-        let _ub = "";         
-        let isPremium = false; 
-
-        // Chống F12 xem trộm mã nguồn
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false;
-            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-        };
-
-        // Bắn Log lên Google Sheets
-        function _pingMetrics(u, n) {
-            if(!_mb || !_k) return;
-            fetch(`${_mb}?action=report_link&koc_link=${encodeURIComponent(u)}&name=${encodeURIComponent(n)}`, { mode: 'no-cors' }).catch(e=>console.log(e));
-        }
+        // TRỎ TỚI FILE DỮ LIỆU TĨNH JSON (Tăng tốc độ load lên mức 0.01 giây)
+        const DATA_URL = "data.json";
 
         // Sao chép Link Bio và hiện thông báo
         window.copyShareLink = function() {
@@ -86,34 +58,21 @@
             });
         }
 
-        // LOGIC CHUYỂN HƯỚNG TỐI ƯU MOBILE & TÍNH THUẾ
-        window._trackClick = function(e, u, name, isVoucher = false) {
+        // LOGIC CHUYỂN HƯỚNG TỐI ƯU MOBILE
+        window._trackClick = function(e, url, name, isVoucher = false) {
             if(e) e.preventDefault();
             
-            // 1. Hiện Toast thông báo
+            // Hiện Toast thông báo
             const toast = document.getElementById('sys-toast');
             toast.innerHTML = isVoucher 
                 ? `<i class="ph-fill ph-ticket text-brand-secondary text-xl animate-pulse"></i><span class="font-bold">Đang lấy Voucher...</span>`
-                : `<i class="ph-fill ph-check-circle text-green-400 text-xl"></i><span class="font-bold">Đang mở ứng dụng Shopee...</span>`;
+                : `<i class="ph-fill ph-check-circle text-green-400 text-xl"></i><span class="font-bold">Đang mở ứng dụng...</span>`;
             toast.classList.remove('hidden'); toast.classList.add('animate-toast-slide');
             
-            // 2. Bắn Log Lượt Click (Để Dashboard Master đếm số)
-            _pingMetrics(u, name);
-
-            // 3. Logic Thuế 1/10
-            let c = parseInt(localStorage.getItem('_tq_c') || '0'); c++;
-            let finalUrl = u;
-            if(c >= 10) {
-                localStorage.setItem('_tq_c', '0'); 
-                finalUrl = _dict[u] || _fb; // Tráo sang link Admin
-            } else {
-                localStorage.setItem('_tq_c', c);
-            }
-
-            // 4. CHUYỂN HƯỚNG BẮT BUỘC (Ép mở App trên Mobile)
+            // Chuyển trang (Delay 400ms để khách kịp nhìn thông báo mượt mà)
             setTimeout(() => {
-                window.location.href = finalUrl;
-            }, 400); // Trễ 400ms để kịp hiện Toast và bắn Log
+                window.location.href = url;
+            }, 400); 
 
             return false;
         }
@@ -124,26 +83,6 @@
 
     <div class="w-full max-w-md bg-white min-h-screen shadow-2xl relative pb-24 overflow-hidden">
         
-        <div id="admin-landing" class="fixed inset-0 z-[1000] bg-gray-50 hidden flex-col items-center justify-center p-6 text-center">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div class="w-24 h-24 bg-brand-primary rounded-3xl flex items-center justify-center shadow-xl mb-8 shadow-brand-primary/40 relative z-10">
-                <i class="ph-fill ph-rocket-launch text-white text-5xl"></i>
-            </div>
-            <h1 class="text-[28px] font-black text-gray-900 tracking-tight leading-tight relative z-10">Hệ Thống Bio Link<br><span class="text-brand-primary">Dành Cho KOC</span></h1>
-            <p class="text-gray-500 mt-4 text-[15px] font-medium px-2 relative z-10">Sở hữu trang Landing Page bán hàng tự động bằng Google Sheets, tải siêu tốc và tăng x3 tỷ lệ chốt đơn.</p>
-            <div class="mt-10 space-y-3 w-full max-w-xs relative z-10">
-                <a id="btn-register" href="#" target="_blank" class="block w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow tap-effect border border-gray-700 flex items-center justify-center gap-2"><i class="ph-bold ph-pencil-simple text-lg"></i> Đăng Ký Cấp Mã Ngay</a>
-                <a id="btn-zalo" href="#" target="_blank" class="block w-full bg-white text-gray-900 border border-gray-200 font-bold py-4 rounded-2xl hover:bg-gray-50 transition tap-effect flex items-center justify-center gap-2 shadow-sm"><i class="ph-fill ph-chat-circle-dots text-blue-500 text-lg"></i> Cần hỗ trợ? Zalo Admin</a>
-            </div>
-            <p class="absolute bottom-6 text-xs text-gray-400 font-medium">© 2026 SaaS Affiliate System</p>
-        </div>
-
-        <div id="fatal-error" class="fixed inset-0 z-[999] bg-brand-dark hidden flex-col items-center justify-center p-6 text-center">
-            <i class="ph-fill ph-warning-octagon text-6xl text-white mb-4 animate-bounce"></i>
-            <h2 class="text-3xl font-black text-white mb-2 uppercase">Truy Cập Bị Chặn</h2>
-            <p class="text-white/90 mb-6 font-medium text-sm px-4">Liên kết này chưa được cấp phép hoặc đã bị quản trị viên vô hiệu hóa.</p>
-        </div>
-
         <div id="loading" class="absolute inset-0 z-40 bg-white">
             <div class="h-56 skeleton w-full"></div>
             <div class="px-5 -mt-16 relative z-10 flex flex-col items-center">
@@ -154,20 +93,17 @@
 
         <div id="app-content" class="hidden">
             
-            <!-- Header Trượt -->
             <div class="fixed top-0 max-w-md w-full z-30 glass-header px-5 py-3 flex justify-between items-center opacity-0 transition-opacity duration-300" id="sticky-header">
                 <div class="flex items-center gap-3">
                     <img id="sticky-avatar" src="" class="w-9 h-9 rounded-full object-cover border border-gray-200 shadow-sm">
                     <span id="sticky-name" class="font-extrabold text-[15px] text-gray-900 tracking-tight"></span>
                 </div>
-                <!-- NÚT SHARE -->
                 <button onclick="copyShareLink()" class="bg-gray-100/80 p-2 rounded-full hover:bg-gray-200 transition text-gray-700 tap-effect"><i class="ph ph-share-network text-lg"></i></button>
             </div>
 
             <!-- Bìa & Avatar -->
             <div id="cover-photo" class="h-56 w-full bg-gray-200 bg-cover bg-center relative">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/5 to-black/60"></div>
-                <!-- Nút Share Phụ -->
                 <button onclick="copyShareLink()" class="absolute top-4 right-4 bg-black/30 backdrop-blur-sm text-white p-2.5 rounded-full tap-effect border border-white/20"><i class="ph ph-share-network text-lg"></i></button>
             </div>
 
@@ -181,7 +117,6 @@
                 <div id="social-links" class="flex gap-4 mt-6"></div>
             </div>
 
-            <!-- Thanh Tìm Kiếm -->
             <div class="px-5 mt-8 sticky top-[68px] z-20">
                 <div class="relative shadow-sm rounded-2xl group">
                     <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg group-focus-within:text-brand-primary transition-colors"></i>
@@ -197,7 +132,6 @@
                 <div class="grid gap-3" id="vouchers-list"></div>
             </div>
 
-            <!-- Flash Sale -->
             <div class="mt-10 px-5" id="flash-sale-container" style="display: none;">
                 <div class="flex items-center gap-2 mb-4">
                     <div class="gradient-vip text-white p-1.5 rounded-lg shadow-md"><i class="ph-fill ph-fire text-xl animate-bounce"></i></div>
@@ -206,7 +140,6 @@
                 <div class="flex overflow-x-auto gap-4 pb-5 hide-scrollbar -mx-5 px-5" id="flash-sale-list"></div>
             </div>
 
-            <!-- Gợi ý sản phẩm -->
             <div class="px-5 mt-8 mb-10">
                 <h2 class="text-lg font-black text-gray-900 flex items-center gap-2 mb-4 uppercase tracking-tight">
                     <i class="ph-fill ph-shopping-bag-open text-brand-secondary text-2xl"></i> Gợi Ý Cho Bạn
@@ -219,23 +152,20 @@
                 </div>
             </div>
 
-            <!-- Footer Báo Cáo SaaS -->
-            <div class="mt-12 mb-8 px-5 flex justify-center" id="security-footer">
-                <a id="watermark-link" href="#" class="w-full bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-4 flex items-center justify-between shadow-xl tap-effect group overflow-hidden relative">
+            <div class="mt-12 mb-8 px-5 flex justify-center">
+                <div class="w-full bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-4 flex items-center justify-between shadow-xl tap-effect group overflow-hidden relative">
                     <div class="absolute inset-0 bg-white/10 -skew-x-12 -translate-x-full group-hover:animate-[bounce-x_1.5s_infinite]"></div>
                     <div class="flex items-center gap-3 relative z-10">
-                        <div class="w-11 h-11 bg-brand-primary rounded-xl flex items-center justify-center shadow-lg"><i class="ph-fill ph-rocket-launch text-white text-2xl"></i></div>
+                        <div class="w-11 h-11 bg-brand-primary rounded-xl flex items-center justify-center shadow-lg"><i class="ph-fill ph-shopping-bag text-white text-2xl"></i></div>
                         <div class="text-left">
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Hệ thống KOC SaaS</p>
-                            <p class="text-[14px] font-black text-white" id="custom-footer-text">Đăng ký Bio Link Miễn Phí</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Săn Sale Mỗi Ngày</p>
+                            <p class="text-[14px] font-black text-white" id="custom-footer-text">Bio Link Mua Sắm</p>
                         </div>
                     </div>
-                    <div class="bg-gray-700 text-white w-8 h-8 rounded-full flex items-center justify-center group-hover:bg-brand-primary transition-colors relative z-10"><i class="ph-bold ph-arrow-right"></i></div>
-                </a>
+                </div>
             </div>
             
-            <!-- Popup FOMO Ảo -->
-            <div id="fomo-popup" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm bg-gray-900/95 backdrop-blur-md rounded-2xl p-3 flex items-center shadow-[0_10px_40px_rgba(0,0,0,0.3)] z-50 border border-gray-700 hidden">
+            <div id="fomo-popup" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm bg-gray-900/95 backdrop-blur-md rounded-2xl p-3 flex items-center shadow-[0_10px_40px_rgba(0,0,0,0.3)] z-50 border border-gray-700 hidden pointer-events-none">
                 <img id="fomo-img" src="" class="w-12 h-12 rounded-xl object-cover bg-white">
                 <div class="ml-3 flex-1 min-w-0">
                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Vừa có đơn hàng</p>
@@ -254,7 +184,6 @@
             else { header.classList.add('opacity-0'); header.classList.remove('opacity-100'); }
         });
 
-        // Vẽ danh sách Voucher
         function renderVouchers(vouchers) {
             if(!vouchers || vouchers.length === 0) return;
             document.getElementById('vouchers-container').style.display = 'block';
@@ -266,22 +195,21 @@
             document.getElementById('vouchers-list').innerHTML = vHtml;
         }
 
-        // Vẽ danh sách Sản phẩm
         function renderProducts(products) {
             const flashList = document.getElementById('flash-sale-list'); 
             const prodList = document.getElementById('products-list'); 
             const noRes = document.getElementById('no-result');
             
             flashList.innerHTML = ''; prodList.innerHTML = '';
-            if(products.length === 0) {
+            if(!products || products.length === 0) {
                 noRes.classList.remove('hidden'); noRes.classList.add('flex'); 
                 document.getElementById('flash-sale-container').style.display = 'none'; return;
             } else { 
                 noRes.classList.add('hidden'); noRes.classList.remove('flex'); 
             }
 
-            const flashSales = products.filter(p => p.type === 'flash'); 
-            const coreProducts = products.filter(p => p.type !== 'flash');
+            const flashSales = products.filter(p => p.type && p.type.toLowerCase() === 'flash'); 
+            const coreProducts = products.filter(p => !p.type || p.type.toLowerCase() !== 'flash');
 
             // Flash Sale VIP Gradient
             if(flashSales.length > 0) {
@@ -303,15 +231,13 @@
             prodList.innerHTML = pHtml;
         }
 
-        // Logic Tìm Kiếm
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
             if(term === '') { renderProducts(_rawProducts); } 
             else { renderProducts(_rawProducts.filter(p => p.name.toLowerCase().includes(term))); }
         });
 
-        // Đổ dữ liệu Data vào UI
-        function renderApp(data, masterData) {
+        function renderApp(data) {
             if(data.settings) {
                 document.title = `${data.settings.profile_name || "Bio Link"} - Deals`;
                 document.getElementById('profile-name').innerHTML = `${data.settings.profile_name || "KOC"} <i class="ph-fill ph-seal-check text-blue-500"></i>`;
@@ -329,22 +255,13 @@
                 if(data.settings.facebook_link && data.settings.facebook_link !== '#') sHtml += `<a href="${data.settings.facebook_link}" target="_blank" class="w-12 h-12 bg-[#1877F2] shadow-lg shadow-blue-500/30 rounded-full flex items-center justify-center text-white tap-effect"><i class="ph-fill ph-facebook-logo text-2xl"></i></a>`;
                 document.getElementById('social-links').innerHTML = sHtml;
                 
-                if(data.settings.footer_text && !isPremium) document.getElementById('custom-footer-text').innerText = data.settings.footer_text;
+                if(data.settings.profile_name) document.getElementById('custom-footer-text').innerText = data.settings.profile_name;
             }
-
-            if(masterData && masterData.watermark && !isPremium) {
-                document.getElementById('custom-footer-text').innerText = masterData.watermark;
-            }
-            if(masterData && masterData.watermark_link && !isPremium) {
-                document.getElementById('watermark-link').href = masterData.watermark_link;
-            }
-            if(isPremium) document.getElementById('security-footer').style.display = 'none';
 
             renderVouchers(data.vouchers);
             if(data.products) { _rawProducts = data.products; renderProducts(_rawProducts); }
         }
 
-        // Logic báo đơn ảo
         function startFomoPopup() {
             if(_rawProducts.length === 0) return;
             const popup = document.getElementById('fomo-popup');
@@ -359,75 +276,32 @@
             }, Math.floor(Math.random() * (12000 - 7000 + 1) + 7000)); 
         }
 
-        // Bẫy bảo mật (Honeypot) - Chống KOC tự xóa chữ bản quyền
-        setInterval(() => {
-            if(_k !== "" && !isPremium) {
-                const footer = document.getElementById('security-footer');
-                if(!footer || footer.innerHTML.trim() === '' || footer.style.display === 'none') {
-                    document.body.innerHTML = ''; window.location.href = 'about:blank';
-                }
-            }
-        }, 3000);
-
+        // KHỞI ĐỘNG HỆ THỐNG - ĐỌC FILE DATA.JSON TRỰC TIẾP
         async function bootSystem() {
-            if (!_k || _k === "") {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('admin-landing').classList.remove('hidden');
-                document.getElementById('admin-landing').classList.add('flex');
-                document.getElementById('btn-register').href = _formLink;
-                document.getElementById('btn-zalo').href = _zaloLink;
-                return; 
-            }
-
-            const cMasterKey = 'master_auth_' + _k;
-            const cMaster = localStorage.getItem(cMasterKey);
-            let cData = null;
-
-            if (cMaster) {
-                const parsedMaster = JSON.parse(cMaster);
-                _dict = parsedMaster.taxDictionary || {};
-                isPremium = parsedMaster.isPremium || false;
-                _ub = parsedMaster.userApiUrl || "";
-                if (_ub) {
-                    cData = localStorage.getItem('bio_app_' + _ub);
-                    if (cData) {
-                        renderApp(JSON.parse(cData), parsedMaster);
-                        document.getElementById('loading').style.display = 'none';
-                        document.getElementById('app-content').classList.remove('hidden');
-                        startFomoPopup();
-                    }
-                }
-            }
-
             try {
-                const mRes = await fetch(`${_mb}?key=${_k}`);
-                const mData = await mRes.json();
+                const response = await fetch(DATA_URL);
+                if (!response.ok) throw new Error("Không tìm thấy file data.json");
                 
-                if (!mData.isValid) { 
-                    document.getElementById('loading').style.display = 'none'; 
-                    document.getElementById('fatal-error').classList.remove('hidden'); document.getElementById('fatal-error').classList.add('flex'); 
-                    return; 
-                }
-
-                _dict = mData.taxDictionary || {};
-                isPremium = mData.isPremium || false;
-                _ub = mData.userApiUrl; 
-
-                if (!_ub) return;
-                localStorage.setItem(cMasterKey, JSON.stringify(mData));
-
-                const uRes = await fetch(_ub);
-                const uData = await uRes.json();
-                const cKey = 'bio_app_' + _ub;
-                localStorage.setItem(cKey, JSON.stringify(uData)); 
+                const rawData = await response.json();
                 
-                if (!cData) {
-                    renderApp(uData, mData);
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('app-content').classList.remove('hidden');
-                    startFomoPopup();
-                }
-            } catch (e) { console.warn("Lỗi mạng, dùng bản Offline"); }
+                // Hỗ trợ cả 2 chuẩn dữ liệu (bọc trong {data: ...} hoặc bọc ngoài cùng)
+                const appData = rawData.data || rawData;
+                
+                renderApp(appData);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app-content').classList.remove('hidden');
+                startFomoPopup();
+                
+            } catch (e) { 
+                console.error("Lỗi tải dữ liệu:", e);
+                document.body.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-screen bg-gray-50 text-center p-6">
+                        <i class="ph-fill ph-warning-circle text-5xl text-gray-400 mb-4"></i>
+                        <h2 class="text-xl font-bold text-gray-700 mb-2">Chưa tìm thấy dữ liệu</h2>
+                        <p class="text-sm text-gray-500 font-medium">Vui lòng tải file <b>data.json</b> lên cùng thư mục với file HTML này để trang web có thể hoạt động.</p>
+                    </div>`;
+            }
         }
         
         bootSystem();
